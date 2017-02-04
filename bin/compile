@@ -4,14 +4,16 @@ set -euo pipefail
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-export CRYSTAL_BIN=$CACHE_DIR/crystal/bin/crystal
+CRYSTAL_BIN=$CACHE_DIR/crystal/bin/crystal
+CRYSTAL_VERSION="0.20.5"
+CRYSTAL_URL=https://github.com/crystal-lang/crystal/releases/download/0.20.5/crystal-0.20.5-1-linux-x86_64.tar.gz
 
-if [ ! -f $CRYSTAL_BIN ] || [[ `$CRYSTAL_BIN -v` != *"0.20.5"* ]]; then
+if [ ! -f $CRYSTAL_BIN ] || [[ `$CRYSTAL_BIN -v` != *"$CRYSTAL_VERSION"* ]]; then
   echo 'Install Crystal'
 
   rm -rf $CACHE_DIR/crystal
   mkdir -p $CACHE_DIR/crystal
-  curl -s -L --retry 15 --retry-delay 2 https://github.com/crystal-lang/crystal/releases/download/0.20.5/crystal-0.20.5-1-linux-x86_64.tar.gz | tar xz -C $CACHE_DIR/crystal --strip-component=1
+  curl -s -L --retry 15 --retry-delay 2 $CRYSTAL_URL | tar xz -C $CACHE_DIR/crystal --strip-component=1
 fi
 
 if [ -f $CRYSTAL_BIN ]; then
